@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import "./style.css"
 import Select from "../Select"
 
-const SelectEmployee = ({ data }) => {
+const SelectEmployee = ({ data, handleEmployeeData }) => {
 
     const [employeesFiltered, setEmployeesFiltered] = useState([])
 
@@ -18,7 +18,7 @@ const SelectEmployee = ({ data }) => {
     }
 
     const handleChangeEmployee = (e) => {
-        console.log(e.target.value)
+        handleEmployeeData(e.target.value)
     }
 
     return (

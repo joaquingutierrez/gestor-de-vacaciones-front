@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Calendar from 'react-calendar';
 
 import "./style.css"
-import {SelectEmployee} from '../../components';
+import { SelectEmployee } from '../../components';
 
 const Home = () => {
 
     const [vacations, setVacations] = useState([new Date(), new Date()]);
     const [data, setData] = useState({})
+    const [selectedEmployee, setSelectedEmployee] = useState({})
 
     async function getVacations() {
         const url = "http://localhost:8080/api/vacation";
@@ -24,7 +25,7 @@ const Home = () => {
         }
     }
 
-    
+
     async function getEmployees() {
         const url = "http://localhost:8080/api/employee";
         try {
@@ -35,7 +36,7 @@ const Home = () => {
 
             const json = await response.json();
             console.log(json)
-            json.map(item=>{
+            json.map(item => {
                 item.desc = item.firstName + " " + item.lastName
             })
             return json
@@ -60,27 +61,45 @@ const Home = () => {
     }
 
     async function getData() {
-        const info = {vacations: [], employees: [], rols: []}
+        const info = { vacations: [], employees: [], rols: [] }
         info.vacations = await getVacations()
         info.employees = await getEmployees()
         info.rols = await getRols()
         setData(info)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getData()
-    },[])
+    }, [])
 
     const onChange = (value) => {
         setVacations(value)
     }
+    
+    const handleEmployeeData = (emp) => {
+        setSelectedEmployee(emp)
+    }
+
+    const tileClassName = useMemo(() => ({ date, view }) => {
+        if (view === 'month' && data.vacations) {
+            for (let vacation of data.vacations) {
+                const startDate = new Date(vacation.startDate);
+                const endDate = new Date(vacation.endDate);
+                if (date >= startDate && date <= endDate) {
+                    return 'highlight';
+                }
+            }
+        }
+        return null;
+    }, [data.vacations]);
 
 
     return (
         <main>
             Home
-            <SelectEmployee data={data} />
-            <Calendar onChange={onChange} value={vacations} selectRange={true} />
+            <SelectEmployee data={data} handleEmployeeData={handleEmployeeData} />
+            <Calendar onChange={onChange} value={vacations} selectRange={true} tileClassName={tileClassName} />
+            {/* <EmployeeInfoContainer /> */}
         </main>
     )
 }
