@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 
 import "./style.css"
 import { SelectEmployee } from '../../components';
+import EmployeeInfoContainer from '../EmployeeContainer';
 
 const Home = () => {
 
@@ -76,7 +77,12 @@ const Home = () => {
         setVacations(value)
     }
     
-    const handleEmployeeData = (emp) => {
+    const handleEmployeeData = (empId) => {
+        const emp = {...data.employees.find(emp => emp._id === empId)}
+        console.log( data.employees)
+        const rolDesc = {...data.rols.find(rol => rol._id === emp.rol)}
+        emp.rol = rolDesc?.desc
+        console.log("TENGO QUE MIRAR ACA", emp)
         setSelectedEmployee(emp)
     }
 
@@ -99,7 +105,7 @@ const Home = () => {
             Home
             <SelectEmployee data={data} handleEmployeeData={handleEmployeeData} />
             <Calendar onChange={onChange} value={vacations} selectRange={true} tileClassName={tileClassName} />
-            {/* <EmployeeInfoContainer /> */}
+            {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
         </main>
     )
 }
