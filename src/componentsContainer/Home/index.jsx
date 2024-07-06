@@ -9,7 +9,7 @@ const Home = () => {
 
     const [vacations, setVacations] = useState([new Date(), new Date()]);
     const [data, setData] = useState({})
-    const [selectedEmployee, setSelectedEmployee] = useState({})
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
 
     async function getVacations() {
         const url = "http://localhost:8080/api/vacation";
@@ -76,14 +76,17 @@ const Home = () => {
     const onChange = (value) => {
         setVacations(value)
     }
-    
+
     const handleEmployeeData = (empId) => {
-        const emp = {...data.employees.find(emp => emp._id === empId)}
-        console.log( data.employees)
-        const rolDesc = {...data.rols.find(rol => rol._id === emp.rol)}
-        emp.rol = rolDesc?.desc
-        console.log("TENGO QUE MIRAR ACA", emp)
-        setSelectedEmployee(emp)
+        const filteredEmp = data.employees.find(emp => emp._id === empId)
+        if (filteredEmp) {
+            const emp = { ...filteredEmp }
+            const rolDesc = { ...data.rols.find(rol => rol._id === emp.rol) }
+            emp.rol = rolDesc?.desc
+            setSelectedEmployee(emp)
+        } else {
+            setSelectedEmployee(null)
+        }
     }
 
     const tileClassName = useMemo(() => ({ date, view }) => {
@@ -98,7 +101,6 @@ const Home = () => {
         }
         return null;
     }, [data.vacations]);
-
 
     return (
         <main>
