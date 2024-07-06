@@ -94,7 +94,7 @@ const Home = () => {
         if (selectedEmployee) {
             setVacations(value)
             console.log(selectedEmployee)
-            createVacation(selectedEmployee._id, selectedEmployee.rol, vacations[0], vacations[1])
+            createVacation(selectedEmployee._id, selectedEmployee.rol, value[0], value[1])
         }
     }
 
