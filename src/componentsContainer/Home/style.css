@@ -1,3 +1,6 @@
 .highlight {
     background-color: red;
 }
+.highlight-selected {
+    background-color: blue;
+}

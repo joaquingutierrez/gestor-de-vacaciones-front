@@ -73,8 +73,29 @@ const Home = () => {
         getData()
     }, [])
 
+    const createVacation = (employeeId,rolId, startDate, endDate) => {
+        const url = "http://localhost:8080/api/vacation";
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employeeId: employeeId,
+                startDate: startDate,
+                endDate: endDate
+            })
+        })
+        .then((data)=>{console.log(data)})
+        .catch((err)=>{console.log(err)})
+    }
+
     const onChange = (value) => {
-        setVacations(value)
+        if (selectedEmployee) {
+            setVacations(value)
+            console.log(selectedEmployee)
+            createVacation(selectedEmployee._id, selectedEmployee.rol, vacations[0], vacations[1])
+        }
     }
 
     const handleEmployeeData = (empId) => {
@@ -98,9 +119,15 @@ const Home = () => {
                     return 'highlight';
                 }
             }
+                const startDate = vacations[0]
+                const endDate = vacations[1]
+                if (date >= startDate && date <= endDate) {
+                    return 'highlight-selected';
+                }
+            
         }
         return null;
-    }, [data.vacations]);
+    }, [data.vacations, vacations]);
 
     return (
         <main>
