@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+
 import "./style.css"
 import { useContext } from "react"
 import { UserContext } from "../../context/UserContext"
@@ -8,7 +9,7 @@ const Header = () => {
     const { user } = useContext(UserContext)
 
     return (
-        <header>
+        <header className="headerContainer">
             {user.name && <h3>¡Hola, {user.name}!</h3>}
             <ul>
                 <li><NavLink to="/">Home</NavLink></li>
