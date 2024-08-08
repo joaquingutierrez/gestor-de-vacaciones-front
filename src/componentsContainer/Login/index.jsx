@@ -56,9 +56,9 @@ const Login = () => {
     };
 
     return (
-        <main>
+        <main className="loginContainer">
             <form>
-                <div>
+                <div className="labelAndInputContainer">
                     <label htmlFor="user">Nombre de Usuario</label>
                     <input
                         type="email"
@@ -68,7 +68,7 @@ const Login = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="labelAndInputContainer">
                     <label htmlFor="password">Contraseña</label>
                     <input
                         type="password"
