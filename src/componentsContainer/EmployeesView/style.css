@@ -1,0 +1,18 @@
+.adminMenu {
+    margin-left: 40px;
+    margin-right: 40px;
+    background-color: var(--quinary-color);
+    height: 4rem;
+}
+.adminMenu ul {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-left: 40px;
+    padding-right: 40px;
+}

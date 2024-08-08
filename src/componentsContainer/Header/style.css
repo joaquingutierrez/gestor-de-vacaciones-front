@@ -3,6 +3,7 @@
     height: 3rem;
     background-color: var(--primary-color);
     padding-right: 40px;
+    padding-left: 40px;
     box-sizing: border-box;
     margin-top: 20px;
     display: flex;
@@ -52,4 +53,8 @@
 
 .headerContainer ul li a.active::after {
     max-width: 100%;
+}
+
+.headerContainer h3 {
+    margin: 0;
 }

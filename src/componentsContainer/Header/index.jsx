@@ -10,16 +10,19 @@ const Header = () => {
 
     return (
         <header className="headerContainer">
-            {user.name && <h3>¡Hola, {user.name}!</h3>}
-            <ul>
-                <li><NavLink to="/">Home</NavLink></li>
-                {
-                    user.name ?
-                        <li><NavLink to="/logout">Cerrar Sesión</NavLink></li>
-                        :
-                        <li><NavLink to="/login">Iniciar Sesión</NavLink></li>
-                }
-            </ul>
+                <h3> {user.name && `¡Hola, ${user.name}!`}</h3>
+                <ul>
+                    <li><NavLink to="/">Home</NavLink></li>
+                    {
+                        user.name ?
+                        <>
+                            <li><NavLink to="/employees">Empleados</NavLink></li>
+                            <li><NavLink to="/logout">Cerrar Sesión</NavLink></li>
+                        </>
+                            :
+                            <li><NavLink to="/login">Iniciar Sesión</NavLink></li>
+                    }
+                </ul>
         </header>
     )
 }
