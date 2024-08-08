@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css"
 import { EmployeeService } from "../../utils/employees";
+import { RolsService } from "../../utils/rols";
 
 const CreateEmployee = () => {
 
@@ -11,20 +12,51 @@ const CreateEmployee = () => {
         street: "",
         nro: "",
         birthDate: "",
-        joiningDate: ""
+        joiningDate: "",
+        rol: ""
     });
+    const [selectedOption, setSelectedOption] = useState("")
+    const [rolsList, setRolsList] = useState([]);
+
+    useEffect(() => {
+        fetchRols();
+    }, []);
+
+    const fetchRols = async () => {
+        const rols = await RolsService.getAllRols();
+        setRolsList(rols);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === "rol") {
+            setSelectedOption(value);
+        }
         setFormData(prevState => ({
             ...prevState,
             [name]: value
-        }))
+        }));
+
     }
 
     const handleClick = async (e) => {
         e.preventDefault();
-        const newEmployee = await EmployeeService.addEmployee(formData)
+        try {
+            await EmployeeService.addEmployee(formData);
+            alert("Empleado creado con éxito");
+            setFormData({
+                firstName: "",
+                lastName: "",
+                dni: "",
+                street: "",
+                nro: "",
+                birthDate: "",
+                joiningDate: "",
+                rol: ""
+            }); // Limpia los campos del formulario
+        } catch (error) {
+            console.error("Error al crear el empleado", error);
+        }
     }
 
     return (
@@ -61,14 +93,17 @@ const CreateEmployee = () => {
                 </div>
                 <div>
                     <label htmlFor="rol">Cargo</label>
-{/*                     <select
+                    <select
                         id="dropdown"
                         value={selectedOption}
                         onChange={handleChange}
+                        name="rol"
                     >
                         <option value="">Seleccione...</option>
-                        
-                    </select> */}
+                        {rolsList.length > 0 && rolsList.map((item, index) =>
+                            <option key={index} value={item._id}>{item.desc}</option>
+                        )}
+                    </select>
                 </div>
                 <button onClick={handleClick} type="submit">Crear</button>
             </form>
