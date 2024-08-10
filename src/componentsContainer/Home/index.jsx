@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Calendar from 'react-calendar';
+import Swal from 'sweetalert2'
 
 import "./style.css"
 import { SelectEmployee } from '../../components';
@@ -34,7 +35,22 @@ const Home = () => {
     const onChange = (value) => {
         if (selectedEmployee) {
             setVacations(value)
-            VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
+            if (value[0] && value[1]) {
+                Swal.fire({
+                    title: "¿Reservar estas fechas?",
+                    showDenyButton: true,
+                    confirmButtonText: "Confirmar",
+                    denyButtonText: `Cancelar`
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
+                        Swal.fire("¡Guardado con éxito!", "", "success");
+                    } else if (result.isDenied) {
+                        setVacations([])
+                        Swal.fire("No agendado", "", "info");
+                    }
+                });
+            }
         }
     }
 
