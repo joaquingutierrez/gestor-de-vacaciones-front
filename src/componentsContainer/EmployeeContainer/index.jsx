@@ -26,7 +26,7 @@ const EmployeeInfoContainer = ({emp}) => {
         <div>
             <ul>
                 <li>{emp?.desc}</li>
-                <li>{emp?.rol}</li>
+                <li>{emp?.rolDesc}</li>
                 <li>Dias Tomados: {emp?.daysTaken}</li>
                 <li>Cantidad de dias que se puede tomar: {getAvailableVacationDays(emp.joiningDate)}</li>
             </ul>

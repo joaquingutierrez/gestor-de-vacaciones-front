@@ -1,6 +1,11 @@
 .highlight {
-    background-color: red;
+    background-color: var(--quinary-color);
 }
 .highlight-selected {
-    background-color: blue;
+    background-color: var(--primary-color);
+}
+
+.react-calendar__month-view__days__day,
+.react-calendar__year-view__months__month {
+    height: 40px;
 }

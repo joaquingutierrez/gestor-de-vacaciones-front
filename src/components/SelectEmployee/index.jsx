@@ -12,7 +12,6 @@ const SelectEmployee = ({ data, handleEmployeeData }) => {
     },[data.employees])
 
     const handleChangeRol = (e) => {
-        console.log(e.target.value)
         if (e.target.value === "0") return setEmployeesFiltered(data.employees)
         setEmployeesFiltered(data.employees.filter(item => item.rol === e.target.value))
     }

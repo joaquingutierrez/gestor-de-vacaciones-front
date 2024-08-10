@@ -30,11 +30,28 @@ export class VacationsService {
         }
     }
 
-    // Actualizar un empleado
     static async updateVacation(id, data) { }
 
-    // Agregar un nuevo empleado
-    static async addVacation(data) { }
+    static async addVacation(employeeId, startDate, endDate) {
+        const data = { employeeId, startDate, endDate }
+        try {
+            const response = await fetch(`${URL}/api/vacation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const newEmployee = await response.json();
+            return newEmployee;
+        } catch (error) {
+            console.error('Failed to add employee:', error);
+            throw error;
+        }
+    }
 
     // Eliminar un empleado
     static async deleteVacation(id) { }

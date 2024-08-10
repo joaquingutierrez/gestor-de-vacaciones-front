@@ -4,6 +4,9 @@ import Calendar from 'react-calendar';
 import "./style.css"
 import { SelectEmployee } from '../../components';
 import EmployeeInfoContainer from '../EmployeeContainer';
+import { VacationsService } from '../../utils/vacations';
+import { EmployeeService } from '../../utils/employees';
+import { RolsService } from '../../utils/rols';
 
 const Home = () => {
 
@@ -11,90 +14,27 @@ const Home = () => {
     const [data, setData] = useState({})
     const [selectedEmployee, setSelectedEmployee] = useState(null)
 
-    async function getVacations() {
-        const url = "http://localhost:8080/api/vacation";
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-            return json
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-
-
-    async function getEmployees() {
-        const url = "http://localhost:8080/api/employee";
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-            console.log(json)
-            json.map(item => {
-                item.desc = item.firstName + " " + item.lastName
-            })
-            return json
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-
-    async function getRols() {
-        const url = "http://localhost:8080/api/rol";
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const json = await response.json();
-            return json
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-
-    async function getData() {
-        const info = { vacations: [], employees: [], rols: [] }
-        info.vacations = await getVacations()
-        info.employees = await getEmployees()
-        info.rols = await getRols()
-        setData(info)
-    }
-
     useEffect(() => {
         getData()
     }, [])
 
-    const createVacation = (employeeId,rolId, startDate, endDate) => {
-        const url = "http://localhost:8080/api/vacation";
-        fetch(url, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                employeeId: employeeId,
-                startDate: startDate,
-                endDate: endDate
-            })
-        })
-        .then((data)=>{console.log(data)})
-        .catch((err)=>{console.log(err)})
+    async function getData() {
+        const info = { vacations: [], employees: [], rols: [] }
+        info.vacations = await VacationsService.getAllVacations()
+        info.employees = await EmployeeService.getAllEmployees()
+        info.rols = await RolsService.getAllRols()
+        info.employees = info.employees.map((item) => ({
+            ...item,
+            desc: `${item.firstName} ${item.lastName}`
+        }));
+        setData(info)
     }
+
 
     const onChange = (value) => {
         if (selectedEmployee) {
             setVacations(value)
-            console.log(selectedEmployee)
-            createVacation(selectedEmployee._id, selectedEmployee.rol, value[0], value[1])
+            VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
         }
     }
 
@@ -103,7 +43,7 @@ const Home = () => {
         if (filteredEmp) {
             const emp = { ...filteredEmp }
             const rolDesc = { ...data.rols.find(rol => rol._id === emp.rol) }
-            emp.rol = rolDesc?.desc
+            emp.rolDesc = rolDesc?.desc
             setSelectedEmployee(emp)
         } else {
             setSelectedEmployee(null)
@@ -119,19 +59,18 @@ const Home = () => {
                     return 'highlight';
                 }
             }
-                const startDate = vacations[0]
-                const endDate = vacations[1]
-                if (date >= startDate && date <= endDate) {
-                    return 'highlight-selected';
-                }
-            
+            const startDate = vacations[0]
+            const endDate = vacations[1]
+            if (date >= startDate && date <= endDate) {
+                return 'highlight-selected';
+            }
+
         }
         return null;
     }, [data.vacations, vacations]);
 
     return (
         <main>
-            Home
             <SelectEmployee data={data} handleEmployeeData={handleEmployeeData} />
             <Calendar onChange={onChange} value={vacations} selectRange={true} tileClassName={tileClassName} />
             {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
