@@ -38,6 +38,7 @@ export class RolsService {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
@@ -59,6 +60,7 @@ export class RolsService {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             if (!response.ok) {

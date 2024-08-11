@@ -39,8 +39,9 @@ export class EmployeeService {
             const response = await fetch(`${URL}/api/employee`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
