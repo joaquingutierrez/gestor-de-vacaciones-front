@@ -66,6 +66,23 @@ const Home = () => {
         }
     }
 
+    const fileredCalendar = async (employeeFilteredByRol, employeeId) => {
+        let vacations = []
+        if (employeeFilteredByRol) {
+            for (let i = 0; i < employeeFilteredByRol.length; i++) {
+                const vacationsData = await VacationsService.getVacationByEmployeeId(employeeFilteredByRol[i]._id)
+                if (vacationsData.length > 0) {
+                    vacations.push(...vacationsData)
+                }
+            }
+        } else if (employeeId) {
+            vacations = await VacationsService.getVacationByEmployeeId(employeeId)
+        } else {
+            vacations = await VacationsService.getAllVacations()
+        }
+        setData((prevState) => ({ ...prevState, vacations: vacations }))
+    }
+
     const tileClassName = useMemo(() => ({ date, view }) => {
         if (view === 'month' && data.vacations) {
             for (let vacation of data.vacations) {
@@ -87,7 +104,7 @@ const Home = () => {
 
     return (
         <main>
-            <SelectEmployee data={data} handleEmployeeData={handleEmployeeData} />
+            <SelectEmployee handleFilter={fileredCalendar} data={data} handleEmployeeData={handleEmployeeData} />
             <Calendar onChange={onChange} value={vacations} selectRange={true} tileClassName={tileClassName} />
             {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
         </main>
