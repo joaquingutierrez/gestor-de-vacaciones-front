@@ -104,10 +104,29 @@ const Home = () => {
         return null;
     }, [data.vacations, vacations]);
 
+    const formatShortWeekday = (locale, date) => {
+        const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        return weekdays[date.getDay()];
+    };
+
+    // Define cómo se deben mostrar los meses
+    const formatMonth = (locale, date) => {
+        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        return months[date.getMonth()];
+    };
+
     return (
         <main>
             <SelectEmployee handleFilter={fileredCalendar} data={data} handleEmployeeData={handleEmployeeData} />
-            <Calendar onChange={onChange} value={vacations} selectRange={true} tileClassName={tileClassName} />
+            <Calendar
+                onChange={onChange}
+                value={vacations}
+                selectRange={true}
+                tileClassName={tileClassName}
+                formatShortWeekday={formatShortWeekday}
+                formatMonth={formatMonth}
+                calendarType={"gregory"}
+            />
             {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
         </main>
     )
