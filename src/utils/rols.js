@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 const URL = "http://localhost:8080"
 
 export class RolsService {
@@ -63,13 +65,9 @@ export class RolsService {
                 credentials: 'include',
                 body: JSON.stringify(data),
             });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             const newRol = await response.json();
             return newRol;
         } catch (error) {
-            console.error('Failed to add Rol:', error);
             throw error;
         }
     }

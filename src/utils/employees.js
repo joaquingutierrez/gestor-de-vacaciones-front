@@ -44,13 +44,9 @@ export class EmployeeService {
                 credentials: 'include',
                 body: JSON.stringify(data),
             });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             const newEmployee = await response.json();
             return newEmployee;
         } catch (error) {
-            console.error('Failed to add employee:', error);
             throw error;
         }
     }

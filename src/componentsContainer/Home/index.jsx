@@ -41,15 +41,17 @@ const Home = () => {
                     showDenyButton: true,
                     confirmButtonText: "Confirmar",
                     denyButtonText: `Cancelar`
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
-                        Swal.fire("¡Guardado con éxito!", "", "success");
-                    } else if (result.isDenied) {
-                        setVacations([])
-                        Swal.fire("No agendado", "", "info");
-                    }
-                });
+                })
+                    .then(async (result) => {
+                        if (result.isConfirmed) {
+                            const data = await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
+                            if (data.message) {
+                                Swal.fire("Ocurrió un problema", data.message, "error");
+                            } else {
+                                Swal.fire("¡Guardado con éxito!", "", "success");
+                            }
+                        }
+                    })
             }
         }
     }

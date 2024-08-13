@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./style.css"
 import { EmployeeService } from "../../utils/employees";
 import { RolsService } from "../../utils/rols";
+import Swal from "sweetalert2";
 
 const CreateEmployee = () => {
 
@@ -42,20 +43,25 @@ const CreateEmployee = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            await EmployeeService.addEmployee(formData);
-            alert("Empleado creado con éxito");
-            setFormData({
-                firstName: "",
-                lastName: "",
-                dni: "",
-                street: "",
-                nro: "",
-                birthDate: "",
-                joiningDate: "",
-                rol: ""
-            }); // Limpia los campos del formulario
+            const data = await EmployeeService.addEmployee(formData);
+            if (data.message) {
+                Swal.fire("Ocurrió un problema", data.message, "error");
+            } else {
+                Swal.fire("Empleado agregado con éxito", "", "success");
+                setFormData({
+                    firstName: "",
+                    lastName: "",
+                    dni: "",
+                    street: "",
+                    nro: "",
+                    birthDate: "",
+                    joiningDate: "",
+                    rol: ""
+                });
+            }
         } catch (error) {
-            console.error("Error al crear el empleado", error);
+            Swal.fire("Ocurrió un problema", error, "error");
+
         }
     }
 

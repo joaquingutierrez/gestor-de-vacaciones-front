@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import "./style.css"
 import { RolsService } from "../../utils/rols"
+import Swal from "sweetalert2"
 
 const RolContainer = () => {
 
@@ -32,7 +33,14 @@ const RolContainer = () => {
     const handleClick = async (e) => {
         e.preventDefault()
         setLoading(true)
-        await RolsService.addRol({ desc: rolData })
+        try {
+            const response = await RolsService.addRol({ desc: rolData })
+            if (response.message) {
+                Swal.fire("Ocurrió un error", response.message, "error")
+            }
+        } catch (err) {
+            Swal.fire("Ocurrió un error", err, "error")
+        }
         setLoading(false)
         setRolData("")
     }
