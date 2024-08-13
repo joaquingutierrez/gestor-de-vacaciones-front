@@ -1,0 +1,13 @@
+.selectContainer select {
+    width: 200px;
+    height: 2rem;
+}
+
+.selectContainer:first-of-type {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.selectContainer:nth-last-of-type(1) {
+    margin-bottom: 30px;
+}

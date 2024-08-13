@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import './App.css';
-import { Footer, Header, Home } from './componentsContainer';
+import { Header, Home } from './componentsContainer';
 import Login from "./componentsContainer/Login";
 import UserProvider from "./context/UserContext";
 import LogoutContainer from "./componentsContainer/LogoutContainer";
@@ -27,7 +27,6 @@ function App() {
             <Route path="rol" element={<RolContainer />} />
           </Route>
         </Routes>
-        <Footer />
       </UserProvider>
     </BrowserRouter>
   );

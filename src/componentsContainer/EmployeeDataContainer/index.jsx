@@ -24,7 +24,7 @@ const EmployeeDataContainer = () => {
     }
 
     return (
-        <section>
+        <section className="employeeDataContainer">
             <h2>{employeeData.firstName + " " + employeeData.lastName}</h2>
             <h3>DNI: {employeeData.dni}</h3>
             <p>Fecha de inicio: {convertDate(employeeData.joiningDate)}</p>

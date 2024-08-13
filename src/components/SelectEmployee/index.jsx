@@ -30,9 +30,8 @@ const SelectEmployee = ({ data, handleEmployeeData, handleFilter }) => {
 
     return (
         <div>
-            <Select data={data.rols} handleChange={handleChangeRol} />
-            <Select data={employeesFiltered} handleChange={handleChangeEmployee} />
-
+            <Select title={"Cargo"} data={data.rols} handleChange={handleChangeRol} />
+            <Select title={"Empleado"} data={employeesFiltered} handleChange={handleChangeEmployee} />
         </div>
     )
 }

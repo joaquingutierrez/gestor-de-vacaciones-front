@@ -14,10 +14,10 @@ const EmployeesView = () => {
             {user &&
                 <div className="adminMenu">
                     <ul>
-                        <NavLink to={"/employees/list"}><li>Lista empleados</li></NavLink>
-                        <NavLink to={"/employees/create"}><li>Registrar empleado</li></NavLink>
-                        <NavLink to={"/employees/rol"}><li>Crear/Editar Cargos</li></NavLink>
-                        <NavLink to={"/employees/history"}><li>Historial de vacaciones</li></NavLink>
+                        <li><NavLink to={"/employees/list"}><li>Lista empleados</li></NavLink></li>
+                        <li><NavLink to={"/employees/create"}><li>Registrar empleado</li></NavLink></li>
+                        <li><NavLink to={"/employees/rol"}><li>Crear/Editar Cargos</li></NavLink></li>
+                        <li><NavLink to={"/employees/history"}><li>Historial de vacaciones</li></NavLink></li>
                     </ul>
                 </div>
             }

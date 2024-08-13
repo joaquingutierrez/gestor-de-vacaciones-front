@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import "./style.css"
 import { EmployeeService } from "../../utils/employees";
 import { RolsService } from "../../utils/rols";
@@ -66,28 +67,28 @@ const CreateEmployee = () => {
     }
 
     return (
-        <section>
+        <section className="createEmployeeContainer">
             <h2>Ingresar Empleado</h2>
             <form>
                 <div>
                     <label htmlFor="firstName">Nombre</label>
-                    <input type="text" name="firstName" id="firstName" value={formData.firstName} onChange={handleChange} />
+                    <input placeholder="Ingrese el nombre..." type="text" name="firstName" id="firstName" value={formData.firstName} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="lastName">Apellido</label>
-                    <input type="text" name="lastName" id="lastName" value={formData.lastName} onChange={handleChange} />
+                    <input placeholder="Ingrese el Apellido..." type="text" name="lastName" id="lastName" value={formData.lastName} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="dni">DNI</label>
-                    <input type="number" name="dni" id="dni" value={formData.dni} onChange={handleChange} />
+                    <input placeholder="Ingrese el DNI..." type="number" name="dni" id="dni" value={formData.dni} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="street">Calle</label>
-                    <input type="text" name="street" id="street" value={formData.street} onChange={handleChange} />
+                    <input placeholder="Ingrese la calle..." type="text" name="street" id="street" value={formData.street} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="nro">Numero</label>
-                    <input type="number" name="nro" id="nro" value={formData.nro} onChange={handleChange} />
+                    <input placeholder="Ingrese el numero de la casa..." type="number" name="nro" id="nro" value={formData.nro} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="birthDate">Fecha de nacimiento</label>

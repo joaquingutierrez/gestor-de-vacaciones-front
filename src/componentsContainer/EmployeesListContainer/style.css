@@ -1,0 +1,15 @@
+.employeeListContainer {
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+.employeeListContainer ul li {
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.employeeListContainer ul li:hover {
+    color: var(--quinary-color);
+}

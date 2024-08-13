@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+
 import "./style.css"
 import { EmployeeService } from "../../utils/employees"
 import { useNavigate } from "react-router-dom"
@@ -28,7 +29,7 @@ const EmployeesListContainer = () => {
     }
 
     return (
-        <section>
+        <section className="employeeListContainer">
             <h2>Lista de empleados</h2>
             <ul>
                 {employeesList.map((item, index) =>

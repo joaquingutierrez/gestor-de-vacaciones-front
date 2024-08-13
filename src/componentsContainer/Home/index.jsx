@@ -14,6 +14,8 @@ const Home = () => {
     const [vacations, setVacations] = useState([new Date(), new Date()]);
     const [data, setData] = useState({})
     const [selectedEmployee, setSelectedEmployee] = useState(null)
+    const [selectedCalendar, setSelectedCalendar] = useState(0)
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
 
     useEffect(() => {
         getData()
@@ -115,18 +117,54 @@ const Home = () => {
         return months[date.getMonth()];
     };
 
+    const renderCalendarYear = () => {
+        const months = Array.from({ length: 12 }, (_, i) => i);
+        return (
+            <div>
+                    <button onClick={() => setSelectedYear((prevState) => prevState - 1)}>prev</button>
+                    <p>{selectedYear}</p>
+                    <button onClick={() => setSelectedYear((prevState) => prevState + 1)}>next</button>
+                <div className="calendar-year-grid">
+                    {months.map((month) => (
+                        <div onClick={() => handleSelectedCalendar(month)} key={month} className="calendar-month">
+                            <h3>{formatMonth('es-ES', new Date(selectedYear, month))}</h3>
+                            <Calendar
+                                value={new Date(selectedYear, month, 1)}
+                                tileClassName={tileClassName}
+                                formatShortWeekday={formatShortWeekday}
+                                formatMonth={formatMonth}
+                                calendarType={"gregory"}
+                                view="month"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    const handleSelectedCalendar = (month) => {
+        setVacations(new Date(selectedYear, month, 1), new Date(selectedYear, month, 1))
+        setSelectedCalendar(month)
+    }
+
     return (
-        <main>
+        <main className='homeContainer'>
             <SelectEmployee handleFilter={fileredCalendar} data={data} handleEmployeeData={handleEmployeeData} />
-            <Calendar
-                onChange={onChange}
-                value={vacations}
-                selectRange={true}
-                tileClassName={tileClassName}
-                formatShortWeekday={formatShortWeekday}
-                formatMonth={formatMonth}
-                calendarType={"gregory"}
-            />
+            {selectedCalendar ? (
+                <>
+                    <button onClick={() => handleSelectedCalendar(null)}>Volver a vista del año</button>
+                    <Calendar
+                        onChange={onChange}
+                        value={vacations}
+                        selectRange={true}
+                        tileClassName={tileClassName}
+                        formatShortWeekday={formatShortWeekday}
+                        formatMonth={formatMonth}
+                        calendarType={"gregory"}
+                    />
+                </>
+            ) : renderCalendarYear()}
             {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
         </main>
     )
