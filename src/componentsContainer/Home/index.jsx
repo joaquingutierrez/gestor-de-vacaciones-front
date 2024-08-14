@@ -8,6 +8,7 @@ import EmployeeInfoContainer from '../EmployeeContainer';
 import { VacationsService } from '../../utils/vacations';
 import { EmployeeService } from '../../utils/employees';
 import { RolsService } from '../../utils/rols';
+import { areDatesEqual, convertDate } from '../../utils/date';
 
 const Home = () => {
 
@@ -38,8 +39,11 @@ const Home = () => {
         if (selectedEmployee) {
             setVacations(value)
             if (value[0] && value[1]) {
+                const formatedStartDate = convertDate(value[0])
+                const formatedEndDate = convertDate(value[1])
                 Swal.fire({
                     title: "¿Reservar estas fechas?",
+                    text: "Desde: " + formatedStartDate + " Hasta: " + formatedEndDate,
                     showDenyButton: true,
                     confirmButtonText: "Confirmar",
                     denyButtonText: `Cancelar`
@@ -49,14 +53,19 @@ const Home = () => {
                             const data = await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
                             if (data.message) {
                                 Swal.fire("Ocurrió un problema", data.message, "error");
-                                setVacations([])
                             } else {
                                 Swal.fire("¡Guardado con éxito!", "", "success");
-                                setVacations([])
                             }
                         }
+                        setVacations([])
                     })
             }
+        }
+    }
+
+    const onClickDay = (value) => {
+        if (vacations.length < 1) {
+            setVacations([value, null])
         }
     }
 
@@ -98,8 +107,13 @@ const Home = () => {
                     return 'highlight';
                 }
             }
-            const startDate = vacations[0]
-            const endDate = vacations[1]
+            const startDate = vacations[0] ? new Date(vacations[0]) : null
+            const endDate = vacations[1] ? new Date(vacations[1]) : null
+            if (startDate) {
+                if (areDatesEqual(date, startDate) && !endDate) {
+                    return 'highlight-selected';
+                }
+            }
             if (date >= startDate && date <= endDate) {
                 return 'highlight-selected';
             }
@@ -123,9 +137,9 @@ const Home = () => {
         const months = Array.from({ length: 12 }, (_, i) => i);
         return (
             <div>
-                    <button onClick={() => setSelectedYear((prevState) => prevState - 1)}>prev</button>
-                    <p>{selectedYear}</p>
-                    <button onClick={() => setSelectedYear((prevState) => prevState + 1)}>next</button>
+                <button onClick={() => setSelectedYear((prevState) => prevState - 1)}>prev</button>
+                <p>{selectedYear}</p>
+                <button onClick={() => setSelectedYear((prevState) => prevState + 1)}>next</button>
                 <div className="calendar-year-grid">
                     {months.map((month) => (
                         <div onClick={() => handleSelectedCalendar(month)} key={month} className="calendar-month">
@@ -158,13 +172,14 @@ const Home = () => {
                     <button onClick={() => handleSelectedCalendar(null)}>Volver a vista del año</button>
                     <Calendar
                         onChange={onChange}
+                        onClickDay={onClickDay}
                         value={vacations}
                         selectRange={true}
                         tileClassName={tileClassName}
                         formatShortWeekday={formatShortWeekday}
                         formatMonth={formatMonth}
                         calendarType={"gregory"}
-                        activeStartDate={new Date(selectedYear, selectedCalendar, 1)} 
+                        activeStartDate={new Date(selectedYear, selectedCalendar, 1)}
                     />
                 </>
             ) : renderCalendarYear()}
