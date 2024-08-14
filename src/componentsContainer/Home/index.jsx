@@ -11,10 +11,10 @@ import { RolsService } from '../../utils/rols';
 
 const Home = () => {
 
-    const [vacations, setVacations] = useState([new Date(), new Date()]);
+    const [vacations, setVacations] = useState([]);
     const [data, setData] = useState({})
     const [selectedEmployee, setSelectedEmployee] = useState(null)
-    const [selectedCalendar, setSelectedCalendar] = useState(0)
+    const [selectedCalendar, setSelectedCalendar] = useState(null)
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
 
     useEffect(() => {
@@ -49,8 +49,10 @@ const Home = () => {
                             const data = await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
                             if (data.message) {
                                 Swal.fire("Ocurrió un problema", data.message, "error");
+                                setVacations([])
                             } else {
                                 Swal.fire("¡Guardado con éxito!", "", "success");
+                                setVacations([])
                             }
                         }
                     })
@@ -134,7 +136,7 @@ const Home = () => {
                                 formatShortWeekday={formatShortWeekday}
                                 formatMonth={formatMonth}
                                 calendarType={"gregory"}
-                                view="month"
+                                showNavigation={false}
                             />
                         </div>
                     ))}
@@ -144,14 +146,14 @@ const Home = () => {
     };
 
     const handleSelectedCalendar = (month) => {
-        setVacations(new Date(selectedYear, month, 1), new Date(selectedYear, month, 1))
+        setVacations([])
         setSelectedCalendar(month)
     }
 
     return (
         <main className='homeContainer'>
             <SelectEmployee handleFilter={fileredCalendar} data={data} handleEmployeeData={handleEmployeeData} />
-            {selectedCalendar ? (
+            {selectedCalendar !== null ? (
                 <>
                     <button onClick={() => handleSelectedCalendar(null)}>Volver a vista del año</button>
                     <Calendar
@@ -162,6 +164,7 @@ const Home = () => {
                         formatShortWeekday={formatShortWeekday}
                         formatMonth={formatMonth}
                         calendarType={"gregory"}
+                        activeStartDate={new Date(selectedYear, selectedCalendar, 1)} 
                     />
                 </>
             ) : renderCalendarYear()}
