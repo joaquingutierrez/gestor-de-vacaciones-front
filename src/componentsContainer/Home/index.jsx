@@ -122,6 +122,57 @@ const Home = () => {
         return null;
     }, [data.vacations, vacations]);
 
+    const tileContent = ({ date, view }) => {
+        if (view === 'month' && data.vacations) {
+            for (let vacation of data.vacations) {
+                const startDate = new Date(vacation.startDate);
+                const endDate = new Date(vacation.endDate);
+                if (date >= startDate && date <= endDate) {
+                    return (
+                        <button
+                            className="calendar-more-info-button"
+                            onClick={(e) => handleInfoClick(date, e)}
+                        >
+                            +
+                        </button>
+                    );
+                }
+            }
+        }
+        return null;
+    };
+
+    const handleInfoClick = async (date, e) => {
+        e.stopPropagation()
+        const vacationsList = await VacationsService.getVacationByDate(date)
+
+        const alertContentPromise = async () => {
+            let content = ``
+            for (let vacation of vacationsList) {
+                const employee = await EmployeeService.getEmployeeById(vacation.employeeId)
+                content += `
+                    <div class="calendar-alert-dateInfo-container">
+                        <h3>${employee.firstName + " " + employee.lastName}</h3>
+                        <div>
+                            <ul>
+                                <li>${convertDate(vacation.startDate)}</li>
+                                <li>${convertDate(vacation.endDate)}</li>
+                            </ul>
+                            <button>Borrar</button>
+                        </div>
+                    </div>
+                `
+            }
+            return content
+        }
+        const alertContent = await alertContentPromise()
+        Swal.fire({
+            title: 'Detalles',
+            html: alertContent,
+            confirmButtonText: "Cerrar"
+        })
+    }
+
     const formatShortWeekday = (locale, date) => {
         const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         return weekdays[date.getDay()];
@@ -176,6 +227,7 @@ const Home = () => {
                         value={vacations}
                         selectRange={true}
                         tileClassName={tileClassName}
+                        tileContent={tileContent}
                         formatShortWeekday={formatShortWeekday}
                         formatMonth={formatMonth}
                         calendarType={"gregory"}

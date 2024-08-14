@@ -30,6 +30,24 @@ export class VacationsService {
         }
     }
 
+    static async getVacationByDate(date) {
+        try {
+            const response = await fetch(URL + "/api/vacation/date",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({date: date}),
+            })
+            const data = await response.json()
+            return data
+        }
+        catch (err) {
+            throw err
+        }
+    }
+
     static async updateVacation(id, data) { }
 
     static async addVacation(employeeId, startDate, endDate) {
