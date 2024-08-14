@@ -142,6 +142,19 @@ const Home = () => {
         return null;
     };
 
+    const handleDeleteVacation = async (vacationId) => {
+        try {
+            await VacationsService.deleteVacation(vacationId)
+            const vacations = await VacationsService.getAllVacations()
+            const div = document.getElementById(`info-container-${vacationId}`)
+            div.remove()
+            setData({...data, vacations: vacations})
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
     const handleInfoClick = async (date, e) => {
         e.stopPropagation()
         const vacationsList = await VacationsService.getVacationByDate(date)
@@ -151,14 +164,14 @@ const Home = () => {
             for (let vacation of vacationsList) {
                 const employee = await EmployeeService.getEmployeeById(vacation.employeeId)
                 content += `
-                    <div class="calendar-alert-dateInfo-container">
+                    <div id="info-container-${vacation._id}" class="calendar-alert-dateInfo-container">
                         <h3>${employee.firstName + " " + employee.lastName}</h3>
                         <div>
                             <ul>
                                 <li>${convertDate(vacation.startDate)}</li>
                                 <li>${convertDate(vacation.endDate)}</li>
                             </ul>
-                            <button>Borrar</button>
+                            <button id="delete-btn-${vacation._id}">Borrar</button>
                         </div>
                     </div>
                 `
@@ -171,6 +184,9 @@ const Home = () => {
             html: alertContent,
             confirmButtonText: "Cerrar"
         })
+        vacationsList.forEach(vacation => {
+            document.getElementById(`delete-btn-${vacation._id}`).addEventListener('click', () => handleDeleteVacation(vacation._id));
+        });
     }
 
     const formatShortWeekday = (locale, date) => {

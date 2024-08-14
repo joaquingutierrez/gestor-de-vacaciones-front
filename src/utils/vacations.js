@@ -32,13 +32,13 @@ export class VacationsService {
 
     static async getVacationByDate(date) {
         try {
-            const response = await fetch(URL + "/api/vacation/date",{
+            const response = await fetch(URL + "/api/vacation/date", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify({date: date}),
+                body: JSON.stringify({ date: date }),
             })
             const data = await response.json()
             return data
@@ -73,5 +73,19 @@ export class VacationsService {
     }
 
     // Eliminar un empleado
-    static async deleteVacation(id) { }
+    static async deleteVacation(id) {
+        try {
+            const response = await fetch(`${URL}/api/vacation/` + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            return response;
+        } catch (error) {
+            console.error('Failed to delete vacation:', error);
+            throw error;
+        }
+    }
 }
