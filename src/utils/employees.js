@@ -31,7 +31,22 @@ export class EmployeeService {
     }
 
     // Actualizar un empleado
-    static async updateEmployee(id, data) { }
+    static async updateEmployee(id, data) {
+        try {
+            const response = await fetch(`${URL}/api/employee/` + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({data}),
+            });
+            const updatedEmployee = await response.json();
+            return updatedEmployee;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     // Agregar un nuevo empleado
     static async addEmployee(data) {

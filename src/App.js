@@ -23,6 +23,7 @@ function App() {
           <Route path="/employees" element={<EmployeesView />}>
             <Route path="list" element={<EmployeesListContainer />} />
             <Route path=":id" element={<EmployeeDataContainer />} />
+            <Route path="edit/:id" element={<CreateEmployee edit={true} />} />
             <Route path="create" element={<CreateEmployee />} />
             <Route path="rol" element={<RolContainer />} />
           </Route>

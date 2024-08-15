@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
 
 import "./style.css"
-import { useParams } from "react-router-dom"
 import { EmployeeService } from "../../utils/employees"
 import { VacationsService } from "../../utils/vacations"
 import { convertDate } from "../../utils/date"
@@ -26,6 +26,7 @@ const EmployeeDataContainer = () => {
     return (
         <section className="employeeDataContainer">
             <h2>{employeeData.firstName + " " + employeeData.lastName}</h2>
+            <Link to={"/employees/edit/" + employeeData._id}><button>Editar empleado</button></Link>
             <h3>DNI: {employeeData.dni}</h3>
             <p>Fecha de inicio: {convertDate(employeeData.joiningDate)}</p>
             <p>Dias tomados: {employeeData.daysTaken}</p>

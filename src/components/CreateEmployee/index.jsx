@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import "./style.css"
 import { EmployeeService } from "../../utils/employees";
 import { RolsService } from "../../utils/rols";
 import Swal from "sweetalert2";
+import { convertDateForFormData } from "../../utils/date";
 
-const CreateEmployee = () => {
+const CreateEmployee = ({ edit = false }) => {
+
+    const { id: employeeId } = useParams()
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -22,7 +26,30 @@ const CreateEmployee = () => {
 
     useEffect(() => {
         fetchRols();
+        if (edit) {
+            getEmployee(employeeId);
+        }
     }, []);
+
+    const getEmployee = async (id) => {
+        try {
+            const employee = await EmployeeService.getEmployeeById(id)
+            setFormData({
+                firstName: employee.firstName,
+                lastName: employee.lastName,
+                dni: employee.dni,
+                street: employee.street,
+                nro: employee.nro,
+                birthDate: convertDateForFormData(employee.birthDate),
+                joiningDate: convertDateForFormData(employee.joiningDate),
+                rol: employee.rol
+            })
+            setSelectedOption(employee.rol)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     const fetchRols = async () => {
         const rols = await RolsService.getAllRols();
@@ -41,7 +68,7 @@ const CreateEmployee = () => {
 
     }
 
-    const handleClick = async (e) => {
+    const handleClick_create = async (e) => {
         e.preventDefault();
         try {
             const data = await EmployeeService.addEmployee(formData);
@@ -62,7 +89,20 @@ const CreateEmployee = () => {
             }
         } catch (error) {
             Swal.fire("Ocurrió un problema", error, "error");
+        }
+    }
 
+    const handleClick_edit = async (e) => {
+        e.preventDefault();
+        try {
+            const data = await EmployeeService.updateEmployee(employeeId, formData);
+            if (data.message) {
+                Swal.fire("Ocurrió un problema", data.message, "error");
+            } else {
+                Swal.fire("Empleado actualizado con éxito", "", "success");
+            }
+        } catch (error) {
+            Swal.fire("Ocurrió un problema", error, "error");
         }
     }
 
@@ -112,7 +152,7 @@ const CreateEmployee = () => {
                         )}
                     </select>
                 </div>
-                <button onClick={handleClick} type="submit">Crear</button>
+                <button onClick={edit ? handleClick_edit : handleClick_create} type="submit">{edit ? 'Editar' : 'Crear'}</button>
             </form>
         </section>
     )
