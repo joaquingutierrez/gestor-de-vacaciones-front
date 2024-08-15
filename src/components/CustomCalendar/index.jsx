@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import Calendar from 'react-calendar';
-import Swal from 'sweetalert2'
-
+import Calendar from "react-calendar";
 import "./style.css"
-import { SelectEmployee } from '../../components';
-import EmployeeInfoContainer from '../EmployeeContainer';
-import { VacationsService } from '../../utils/vacations';
-import { EmployeeService } from '../../utils/employees';
-import { RolsService } from '../../utils/rols';
-import { areDatesEqual, convertDate } from '../../utils/date';
+import { areDatesEqual, convertDate } from "../../utils/date";
+import { useEffect, useMemo, useState } from "react";
+import { VacationsService } from "../../utils/vacations";
+import { EmployeeService } from "../../utils/employees";
+import { RolsService } from "../../utils/rols";
+import Swal from "sweetalert2";
 
-const Home = () => {
+const CustomCalendar = ({ employeeId }) => {
 
     const [vacations, setVacations] = useState([]);
     const [data, setData] = useState({})
@@ -31,6 +28,10 @@ const Home = () => {
             ...item,
             desc: `${item.firstName} ${item.lastName}`
         }));
+        const employee = await EmployeeService.getEmployeeById(employeeId)
+        info.vacations = info.vacations.filter((vacation)=>vacation.rolId === employee.rol)
+        console.log(info.vacations)
+        setSelectedEmployee(employee)
         setData(info)
     }
 
@@ -50,7 +51,7 @@ const Home = () => {
                 })
                     .then(async (result) => {
                         if (result.isConfirmed) {
-                            const data = await VacationsService.addVacation(selectedEmployee._id, value[0], value[1])
+                            const data = await VacationsService.addVacationWithOutLimit(selectedEmployee._id, value[0], value[1])
                             if (data.message) {
                                 Swal.fire("Ocurrió un problema", data.message, "error");
                             } else {
@@ -69,40 +70,13 @@ const Home = () => {
         }
     }
 
-    const handleEmployeeData = (empId) => {
-        const filteredEmp = data.employees.find(emp => emp._id === empId)
-        if (filteredEmp) {
-            const emp = { ...filteredEmp }
-            const rolDesc = { ...data.rols.find(rol => rol._id === emp.rol) }
-            emp.rolDesc = rolDesc?.desc
-            setSelectedEmployee(emp)
-        } else {
-            setSelectedEmployee(null)
-        }
-    }
-
-    const fileredCalendar = async (employeeFilteredByRol, employeeId) => {
-        let vacations = []
-        if (employeeFilteredByRol) {
-            for (let i = 0; i < employeeFilteredByRol.length; i++) {
-                const vacationsData = await VacationsService.getVacationByEmployeeId(employeeFilteredByRol[i]._id)
-                if (vacationsData.length > 0) {
-                    vacations.push(...vacationsData)
-                }
-            }
-        } else {
-            vacations = await VacationsService.getAllVacations()
-        }
-        setData((prevState) => ({ ...prevState, vacations: vacations }))
-    }
-
     const tileClassName = useMemo(() => ({ date, view }) => {
         if (view === 'month' && data.vacations) {
             for (let vacation of data.vacations) {
                 const startDate = new Date(vacation.startDate);
                 const endDate = new Date(vacation.endDate);
                 if (date >= startDate && date <= endDate) {
-                    if (vacation.employeeId === selectedEmployee?._id) {
+                    if (vacation.employeeId === employeeId) {
                         return 'highlight-employeeVacation'
                     } else {
                         return 'highlight';
@@ -235,7 +209,6 @@ const Home = () => {
 
     return (
         <main className='homeContainer'>
-            <SelectEmployee handleFilter={fileredCalendar} data={data} handleEmployeeData={handleEmployeeData} />
             {selectedCalendar !== null ? (
                 <>
                     <button onClick={() => handleSelectedCalendar(null)}>Volver a vista del año</button>
@@ -253,9 +226,8 @@ const Home = () => {
                     />
                 </>
             ) : renderCalendarYear()}
-            {selectedEmployee && <EmployeeInfoContainer emp={selectedEmployee} />}
         </main>
     )
 }
 
-export default Home
+export default CustomCalendar

@@ -6,11 +6,13 @@ import "./style.css"
 import { EmployeeService } from "../../utils/employees"
 import { VacationsService } from "../../utils/vacations"
 import { convertDate } from "../../utils/date"
+import CustomCalendar from "../../components/CustomCalendar"
 
 const EmployeeDataContainer = () => {
 
     const [employeeData, setEmployeeData] = useState({})
     const [vacationsData, setVacationsData] = useState([])
+    const [showCalendar, setShowCalendar] = useState(false)
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -46,6 +48,10 @@ const EmployeeDataContainer = () => {
             })
     }
 
+    const handleClick = () => {
+        setShowCalendar(!showCalendar)
+    }
+
     return (
         <section className="employeeDataContainer">
             <h2>{employeeData.firstName + " " + employeeData.lastName}</h2>
@@ -55,6 +61,8 @@ const EmployeeDataContainer = () => {
             <p>Fecha de inicio: {convertDate(employeeData.joiningDate)}</p>
             <p>Dias tomados: {employeeData.daysTaken}</p>
             <p>Dias disponibles: "PRÓXIMAMENTE"</p>
+            <p>Adelantar vacaciones (sin límite de días): <button onClick={handleClick}>{showCalendar ? "Esconder Calendario" : "Mostrar Calendario"}</button></p>
+            {showCalendar && <CustomCalendar employeeId={employeeData._id} />}
             <h4>Historial de vacaciones: </h4>
             {vacationsData.length > 0 ? (
                 vacationsData.map((item, index) =>

@@ -25,6 +25,10 @@
     background-color: var(--quinary-color);
 }
 
+.highlight-employeeVacation {
+    background-color: var(--special-color);
+}
+
 .highlight-selected {
     background-color: var(--primary-color);
 }

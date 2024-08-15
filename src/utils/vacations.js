@@ -61,11 +61,27 @@ export class VacationsService {
                 credentials: 'include',
                 body: JSON.stringify(data),
             });
-            /*             if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        } */
-            const newEmployee = await response.json();
-            return newEmployee;
+            const newVacation = await response.json();
+            return newVacation;
+        } catch (error) {
+            console.error('Failed to add vacation:', error);
+            throw error;
+        }
+    }
+
+    static async addVacationWithOutLimit(employeeId, startDate, endDate) {
+        const data = { employeeId, startDate, endDate }
+        try {
+            const response = await fetch(`${URL}/api/vacation/withoutLimit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(data),
+            });
+            const newVacation = await response.json();
+            return newVacation;
         } catch (error) {
             console.error('Failed to add vacation:', error);
             throw error;
