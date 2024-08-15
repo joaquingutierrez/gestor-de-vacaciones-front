@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-
 const URL = "http://localhost:8080"
 
 export class RolsService {
@@ -73,5 +71,19 @@ export class RolsService {
     }
 
     // Eliminar un empleado
-    static async deleteRol(id) { }
+    static async deleteRol(id) { 
+        try {
+            const response = await fetch(`${URL}/api/rol/` + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            return response;
+        } catch (error) {
+            console.error('Failed to delete Rol:', error);
+            throw error;
+        }
+    }
 }

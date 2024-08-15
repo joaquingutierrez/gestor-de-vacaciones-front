@@ -55,6 +55,33 @@ const RolContainer = () => {
         fetchRols()
     }
 
+    const handleDelete = async (id) => {
+        Swal.fire({
+            title: "Rol Eliminado con éxito",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cerrar"
+        })
+            .then(async (response) => {
+                if (response.isConfirmed) {
+                    try {
+                        await RolsService.deleteRol(id)
+                        Swal.fire({
+                            title: "Rol Eliminado con éxito",
+                            confirmButtonText: "Confirmar"
+                        })
+                    }
+                    catch (err) {
+                        Swal.fire({
+                            title: "Error al eliminar el Rol",
+                            text: "Por favor, intente más tarde",
+                            confirmButtonText: "Confirmar"
+                        })
+                    }
+                }
+            })
+    }
+
 
     return (
         <section>
@@ -77,11 +104,14 @@ const RolContainer = () => {
                 )}
             </select>
             {selectedOption && (
-                <form>
-                    <label htmlFor="editDesc">Editar</label>
-                    <input type="text" name="editDesc" id="editDesc" value={rolEdit} onChange={handleChange} />
-                    <button onClick={handleClickEdit} type="submit">Confirmar</button>
-                </form>
+                <div>
+                    <form>
+                        <label htmlFor="editDesc">Editar</label>
+                        <input type="text" name="editDesc" id="editDesc" value={rolEdit} onChange={handleChange} />
+                        <button onClick={handleClickEdit} type="submit">Confirmar</button>
+                    </form>
+                    <button onClick={() => handleDelete(selectedOption)}>Eliminar</button>
+                </div>
             )}
         </section>
     )
