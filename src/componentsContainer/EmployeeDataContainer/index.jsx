@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import Swal from "sweetalert2"
 
 import "./style.css"
 import { EmployeeService } from "../../utils/employees"
@@ -11,6 +12,7 @@ const EmployeeDataContainer = () => {
     const [employeeData, setEmployeeData] = useState({})
     const [vacationsData, setVacationsData] = useState([])
     const { id } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetchEmployee()
@@ -23,10 +25,32 @@ const EmployeeDataContainer = () => {
         setVacationsData(vacations)
     }
 
+    const handleDelete = async (id) => {
+        Swal.fire({
+            title: "¿Esta seguro que quiere eliminar a este empleado?",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar"
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    await EmployeeService.deleteEmployee(id)
+                    Swal.fire({
+                        title: "Eliminado con éxito",
+                        confirmButtonText: "Cerrar"
+                    })
+                        .then(() => {
+                            navigate("/employees/list")
+                        })
+                }
+            })
+    }
+
     return (
         <section className="employeeDataContainer">
             <h2>{employeeData.firstName + " " + employeeData.lastName}</h2>
             <Link to={"/employees/edit/" + employeeData._id}><button>Editar empleado</button></Link>
+            <button onClick={() => handleDelete(employeeData._id)}>Eliminar</button>
             <h3>DNI: {employeeData.dni}</h3>
             <p>Fecha de inicio: {convertDate(employeeData.joiningDate)}</p>
             <p>Dias tomados: {employeeData.daysTaken}</p>

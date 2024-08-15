@@ -30,7 +30,6 @@ export class EmployeeService {
         }
     }
 
-    // Actualizar un empleado
     static async updateEmployee(id, data) {
         try {
             const response = await fetch(`${URL}/api/employee/` + id, {
@@ -39,7 +38,7 @@ export class EmployeeService {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({data}),
+                body: JSON.stringify({ data }),
             });
             const updatedEmployee = await response.json();
             return updatedEmployee;
@@ -48,7 +47,6 @@ export class EmployeeService {
         }
     }
 
-    // Agregar un nuevo empleado
     static async addEmployee(data) {
         try {
             const response = await fetch(`${URL}/api/employee`, {
@@ -66,6 +64,19 @@ export class EmployeeService {
         }
     }
 
-    // Eliminar un empleado
-    static async deleteEmployee(id) { }
+    static async deleteEmployee(id) {
+        try {
+            const response = await fetch(`${URL}/api/employee/` + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+            const newEmployee = await response.json();
+            return newEmployee;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
