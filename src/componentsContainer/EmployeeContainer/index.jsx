@@ -1,7 +1,23 @@
+import { useEffect, useState } from "react";
+
 import "./style.css"
 import { convertDate } from "../../utils/date";
+import { EmployeeService } from "../../utils/employees";
 
 const EmployeeInfoContainer = ({ emp }) => {
+
+    const [daysLeft, setDaysLeft] = useState(0)
+
+    const getDaysLeft = async() => {
+        const days = await EmployeeService.getEmployeeVacationsDaysLeft(emp._id)
+        setDaysLeft(days)
+    }
+
+    useEffect(()=>{
+        if (emp) {
+            getDaysLeft()
+        }
+    },[emp])
 
     const getAvailableVacationDays = (joiningDate) => {
         const today = new Date();
@@ -33,7 +49,8 @@ const EmployeeInfoContainer = ({ emp }) => {
                 <li>{emp?.desc}</li>
                 <li>{emp?.rolDesc}</li>
                 <li>Dias Tomados: {emp?.daysTaken}</li>
-                <li>Cantidad de dias que se puede tomar: {getAvailableVacationDays(emp.joiningDate)}</li>
+                <li>Dias disponibles: {daysLeft}</li>
+                <li>Máxima cantidad de dias que se puede tomar: {getAvailableVacationDays(emp.joiningDate)}</li>
             </ul>
 
         </div>

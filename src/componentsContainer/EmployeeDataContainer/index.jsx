@@ -13,6 +13,7 @@ const EmployeeDataContainer = () => {
     const [employeeData, setEmployeeData] = useState({})
     const [vacationsData, setVacationsData] = useState([])
     const [showCalendar, setShowCalendar] = useState(false)
+    const [daysLeft, setDaysLeft] = useState(0)
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -25,6 +26,8 @@ const EmployeeDataContainer = () => {
         setEmployeeData(employee)
         const vacations = await VacationsService.getVacationByEmployeeId(id)
         setVacationsData(vacations)
+        const days = await EmployeeService.getEmployeeVacationsDaysLeft(id)
+        setDaysLeft(days)
     }
 
     const handleDelete = async (id) => {
@@ -60,7 +63,8 @@ const EmployeeDataContainer = () => {
             <h3>DNI: {employeeData.dni}</h3>
             <p>Fecha de inicio: {convertDate(employeeData.joiningDate)}</p>
             <p>Dias tomados: {employeeData.daysTaken}</p>
-            <p>Dias disponibles: "PRÓXIMAMENTE"</p>
+            <p>Dias disponibles: {daysLeft}</p>
+            <p>Las vacaciones se reinician el día: {convertDate(employeeData.restartVacationsDays_Date)}</p>
             <p>Adelantar vacaciones (sin límite de días): <button onClick={handleClick}>{showCalendar ? "Esconder Calendario" : "Mostrar Calendario"}</button></p>
             {showCalendar && <CustomCalendar employeeId={employeeData._id} />}
             <h4>Historial de vacaciones: </h4>

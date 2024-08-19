@@ -5,9 +5,6 @@ export class EmployeeService {
     static async getAllEmployees() {
         try {
             const response = await fetch(URL + "/api/employee");
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             const data = await response.json();
             return data;
         } catch (err) {
@@ -17,16 +14,25 @@ export class EmployeeService {
     }
 
     static async getEmployeeById(id) {
+        console.log(id)
         try {
             const response = await fetch(URL + "/api/employee/" + id);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             const data = await response.json();
             return data;
         } catch (err) {
             console.error('There was a problem with the fetch operation:', err);
             throw err; // Re-throw the error to handle it in the component if needed
+        }
+    }
+
+    static async getEmployeeVacationsDaysLeft(id) {
+        try {
+            const response = await fetch(URL + "/api/employee/" + id + "/daysleft");
+            const data = await response.json();
+            return data.daysLeft;
+        } catch (err) {
+            console.error('There was a problem with the fetch operation:', err);
+            throw err;
         }
     }
 
