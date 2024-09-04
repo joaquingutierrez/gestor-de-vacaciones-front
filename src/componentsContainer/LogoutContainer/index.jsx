@@ -1,10 +1,13 @@
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { api_url } from "../../utils/const"
 
 const LogoutContainer = () => {
     const { user, closeSession } = useContext(UserContext)
     const navigate = useNavigate();
+
+    const URL = api_url
 
     useEffect(() => {
         if (!user.name) {
@@ -14,7 +17,7 @@ const LogoutContainer = () => {
 
     const logout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/logout", {
+            const response = await fetch(URL + "/logout", {
                 method: 'POST',
                 credentials: 'include'
             })

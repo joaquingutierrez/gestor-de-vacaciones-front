@@ -1,4 +1,6 @@
-const URL = "http://localhost:8080"
+import { api_url } from "./const"
+
+const URL = api_url
 
 export class VacationsService {
 

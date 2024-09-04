@@ -1,11 +1,12 @@
 import { createContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { api_url } from "../../utils/const"
 
 export const UserContext = createContext()
 
 const UserProvider = ({ children }) => {
 
-    const URL = "http://localhost:8080/"
+    const URL = api_url
 
     const [user, setUser] = useState({
         name: "",

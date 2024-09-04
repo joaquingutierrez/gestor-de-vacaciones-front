@@ -3,11 +3,15 @@ import { useContext, useEffect, useState } from "react";
 import "./style.css"
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { api_url } from "../../utils/const"
 
 const Login = () => {
 
     const { user, openSession } = useContext(UserContext)
     const navigate = useNavigate();
+
+    const URL = api_url
+
 
     useEffect(() => {
         if (user.name) {
@@ -34,7 +38,7 @@ const Login = () => {
         const { email, password } = formData;
 
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch(URL + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
