@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import './App.css';
-import { Header, Home } from './componentsContainer';
+import { Header, HistoryContainer, Home } from './componentsContainer';
 import Login from "./componentsContainer/Login";
 import UserProvider from "./context/UserContext";
 import LogoutContainer from "./componentsContainer/LogoutContainer";
@@ -26,6 +26,7 @@ function App() {
             <Route path="edit/:id" element={<CreateEmployee edit={true} />} />
             <Route path="create" element={<CreateEmployee />} />
             <Route path="rol" element={<RolContainer />} />
+            <Route path="history" element={<HistoryContainer />} />
           </Route>
         </Routes>
       </UserProvider>
