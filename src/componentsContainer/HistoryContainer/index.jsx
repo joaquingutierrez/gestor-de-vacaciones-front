@@ -21,7 +21,7 @@ const HistoryContainer = () => {
     }
 
     useEffect(() => {
-
+        getVacations()
     }, [])
 
     return (
