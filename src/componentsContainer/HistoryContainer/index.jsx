@@ -17,6 +17,7 @@ const HistoryContainer = () => {
                 ...emp
             }
         })
+        console.log("history", vacations)
         setEmployees_vacations(vacations)
     }
 
