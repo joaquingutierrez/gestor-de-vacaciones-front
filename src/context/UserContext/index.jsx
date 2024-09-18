@@ -16,7 +16,7 @@ const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = Cookies.get("access_token");
 
-        fetch(URL + 'api/validate-token', {
+        fetch(URL + '/api/validate-token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
