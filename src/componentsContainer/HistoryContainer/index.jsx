@@ -10,15 +10,14 @@ const HistoryContainer = () => {
     const getVacations = async () => {
         const vacations = await VacationsService.getAllVacations()
         const employees = await EmployeeService.getAllEmployees()
-        vacations.map((vac) => {
+        const vacations_employeesArray = vacations.map((vac) => {
             const emp = employees.find(emp => emp._id === vacations.employeeId)
             return {
                 ...vac,
                 ...emp
             }
         })
-        console.log("history", vacations)
-        setEmployees_vacations(vacations)
+        setEmployees_vacations(vacations_employeesArray)
     }
 
     useEffect(() => {
