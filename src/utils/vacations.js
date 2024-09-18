@@ -1,4 +1,5 @@
 import { api_url } from "./const"
+const token = localStorage.getItem('access_token') || null;
 
 const URL = api_url
 
@@ -38,6 +39,7 @@ export class VacationsService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
                 body: JSON.stringify({ date: date }),
@@ -59,6 +61,7 @@ export class VacationsService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
                 body: JSON.stringify(data),
@@ -78,6 +81,7 @@ export class VacationsService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
                 body: JSON.stringify(data),
@@ -97,6 +101,7 @@ export class VacationsService {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
             });

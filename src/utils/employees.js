@@ -1,4 +1,5 @@
 import { api_url } from "./const"
+const token = localStorage.getItem('access_token') || null;
 
 const URL = api_url
 
@@ -16,7 +17,6 @@ export class EmployeeService {
     }
 
     static async getEmployeeById(id) {
-        console.log(id)
         try {
             const response = await fetch(URL + "/api/employee/" + id);
             const data = await response.json();
@@ -43,7 +43,8 @@ export class EmployeeService {
             const response = await fetch(`${URL}/api/employee/` + id, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
                 body: JSON.stringify({ data }),
@@ -60,7 +61,8 @@ export class EmployeeService {
             const response = await fetch(`${URL}/api/employee`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include',
                 body: JSON.stringify(data),
@@ -77,7 +79,8 @@ export class EmployeeService {
             const response = await fetch(`${URL}/api/employee/` + id, {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 credentials: 'include'
             });
